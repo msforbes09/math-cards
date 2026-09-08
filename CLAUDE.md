@@ -2,6 +2,8 @@
 
 Guidance for Claude Code working in this repository.
 
+@AGENTS.md
+
 ## What this is
 
 **math-cards** — an online arithmetic practice system for elementary students,
@@ -88,9 +90,12 @@ npx tsc --noEmit    # types
 npm run lint        # eslint
 ```
 
-GitHub Actions runs the same three on every PR into `develop`. The workflow
-lands with the project scaffold — until `package.json` exists there is nothing
-for it to run.
+GitHub Actions (`.github/workflows/ci.yml`) runs the same three on every PR
+into `develop` or `main`.
+
+`npx tsc --noEmit` needs `.next/types` to exist, or it fails on Next's generated
+globals (`LayoutProps`, `PageProps`). Run `npm run build` once after a clean
+checkout. CI builds before it typechecks for the same reason.
 
 ## Conventions skill
 
