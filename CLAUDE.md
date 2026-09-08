@@ -31,7 +31,7 @@ read as permission:
   `git branch --show-current`. After a PR merges the checkout lands back on
   `develop`, and that is exactly when the mistake gets made.
 - **Never merge a PR.** Open it and stop. The merge is the user's call, per PR,
-  every time. "Proceed until merged" authorises the work *up to opening the PR*.
+  every time. "Proceed until merged" authorizes the work *up to opening the PR*.
 - **Never commit a secret.** This repo is public. `.env` is never committed;
   `.env.example` is the tracked template. Never write to `.env` — update the
   example and tell the user what to set.
@@ -39,7 +39,14 @@ read as permission:
 ## Branching & pull requests
 
 - **`develop` is the working branch.** All work targets `develop`.
-- **`main` holds released state.** `develop` → `main` when a milestone ships.
+- **`develop` is also the deployed branch.** Vercel's production branch is set to
+  `develop`, so **merging a PR into `develop` publishes it to the live site.**
+  There is no staging gate in front of it — which is exactly why Claude never
+  merges a PR.
+- **`main` holds released state**, and is not deployed. `develop` → `main` when
+  a milestone ships.
+- Vercel builds a preview deployment for every branch and PR; use that preview
+  URL to try a change on a real tablet before it is merged.
 - Feature branches: `feature/<slug>` off freshly-fetched `origin/develop`.
 - First push is explicit: `git push -u origin <branch>` — `git checkout -b
   <branch> origin/develop` sets upstream to `develop`, so a bare `git push`
@@ -66,14 +73,14 @@ soon as its branch is merged.
 
 ## TDD — the Iron Law
 
-Every feature, bugfix, refactor and behaviour change:
+Every feature, bugfix, refactor and behavior change:
 
-1. **Red** — one failing test describing the desired behaviour. Run it. Watch it
+1. **Red** — one failing test describing the desired behavior. Run it. Watch it
    fail *for the right reason* — feature missing, not a typo. If it passes
    immediately, the test is wrong; fix it first.
 2. **Green** — the minimum production code to pass. No speculative options, no
    "while I'm here".
-3. **Blue** — refactor with tests green. No new behaviour in this phase.
+3. **Blue** — refactor with tests green. No new behavior in this phase.
 
 No production code without a failing test first. If the code came first, delete
 it and start from Red. "I already tested it manually" and "this is too simple to
@@ -90,13 +97,16 @@ npx tsc --noEmit    # types
 npm run lint        # eslint
 ```
 
+Node is pinned to **22.x** (`engines.node`, `.nvmrc`) so this machine, CI and
+Vercel agree. See the Node 25 note below for what happens when they do not.
+
 GitHub Actions (`.github/workflows/ci.yml`) runs the same three on every PR
 into `develop` or `main`.
 
 **Node 25's built-in `localStorage`** is an inert stub without
 `--localstorage-file`, and Vitest's jsdom environment lets it shadow jsdom's
 real `Storage`. Node 22 (what CI runs) has no such global, so this splits local
-and CI behaviour. `test/support/local-storage-polyfill.ts` installs a
+and CI behavior. `test/support/local-storage-polyfill.ts` installs a
 spec-compliant Storage *only when the environment's own one is unusable*.
 Spy on `window.localStorage` in tests, never on `Storage.prototype`.
 

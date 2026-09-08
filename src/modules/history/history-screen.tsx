@@ -40,7 +40,7 @@ export function HistoryScreen() {
       {!available && (
         <p className="rounded-md border border-neutral-300 p-4 text-sm text-neutral-600 dark:border-neutral-700 dark:text-neutral-400">
           This browser will not let the app save anything, so sessions are not
-          being kept on this device. Practising still works.
+          being kept on this device. Practicing still works.
         </p>
       )}
 
@@ -48,7 +48,7 @@ export function HistoryScreen() {
         <p className="text-neutral-600 dark:text-neutral-400">
           No sessions yet.{" "}
           <Link href="/practice" className="underline underline-offset-4">
-            Practise a card
+            Practice a card
           </Link>{" "}
           and it will show up here.
         </p>

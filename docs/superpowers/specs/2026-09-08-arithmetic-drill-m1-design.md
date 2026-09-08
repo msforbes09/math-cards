@@ -5,12 +5,12 @@
 
 ## Context
 
-Elementary students in the Philippines practise arithmetic with printed
+Elementary students in the Philippines practice arithmetic with printed
 "Window Cards" — a grid of 100 single-digit problems with an answer box under
 each, headed by Name, Grade and Date. Card **M-1** is the first multiplication
 card: 100 problems drawn from the single-digit facts.
 
-This project digitises that practice. It keeps the card's *content* — single
+This project digitizes that practice. It keeps the card's *content* — single
 digit multiplication, factors 0–9 — but replaces the printed grid with a flash
 card presentation: one problem on screen at a time.
 
@@ -29,7 +29,7 @@ card presentation: one problem on screen at a time.
 
 ## Users
 
-Elementary students practising alone. There is no second role in M1. No user
+Elementary students practicing alone. There is no second role in M1. No user
 identity is collected — not even a name.
 
 ## The drill
@@ -191,15 +191,25 @@ reason, the minimum code to pass it, then cleanup with tests staying green.
   distinct in-range problems; first-attempt correctness scoring; the retry loop;
   the reveal on the third miss; empty submissions not counting; storage
   round-trips, the record cap, and corrupt-data recovery.
-- **React Testing Library** for the behaviours that exist only in the UI: Enter
+- **React Testing Library** for the behaviors that exist only in the UI: Enter
   submits, a wrong answer keeps the same card, the reveal appears on the third
   miss, and the input rejects non-digits.
 - No end-to-end harness in M1. Three screens do not yet justify one.
 
 ## Deployment
 
-Static export from Next.js, hosted on any static host. No server, no runtime
-configuration, no secrets.
+Hosted on Vercel, which runs Next.js natively. Every route in M1 prerenders as
+static content, but the app is **not** a static export (`output: "export"`):
+export mode exists for hosts that can only serve files, and adopting it here
+would give up Vercel's native handling to gain nothing M1 needs.
+
+There are no environment variables and no secrets — all state is in the
+browser. Node is pinned to 22.x via `engines.node`, matching CI, because the
+runtime differences between Node versions have already produced one bug in this
+project (Node 25's stub `localStorage`).
+
+**Vercel's production branch is `develop`, not `main`.** Anything merged to
+`develop` goes live.
 
 ## Deferred to later milestones
 

@@ -36,7 +36,7 @@ export function ResultsScreen({
       {summary.missed.length > 0 && (
         <div className="w-full">
           <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-neutral-500">
-            Practise these
+            Practice these
           </h2>
           <ul className="flex flex-col gap-2">
             {summary.missed.map((fact) => (
@@ -60,7 +60,7 @@ export function ResultsScreen({
           onClick={onRestart}
           className="rounded-md bg-neutral-900 px-5 py-2.5 font-medium text-white dark:bg-neutral-100 dark:text-neutral-900"
         >
-          Practise again
+          Practice again
         </button>
         <Link
           href="/history"

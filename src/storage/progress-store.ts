@@ -15,8 +15,8 @@ let cachedKey: string | null = null;
 
 /** Browser storage is an external mutable store, so React reads it through
  *  useSyncExternalStore rather than an effect. The snapshot must keep the same
- *  reference between reads or React re-renders forever, so it is memoised on a
- *  serialisation of its own contents. */
+ *  reference between reads or React re-renders forever, so it is memoized on a
+ *  serialization of its own contents. */
 export function getSnapshot(): ProgressSnapshot {
   const available = repository.isAvailable();
   const records = repository.list();

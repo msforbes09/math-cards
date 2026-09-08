@@ -16,7 +16,7 @@ export default function HomePage() {
         href="/practice"
         className="rounded-md bg-neutral-900 px-6 py-3 text-lg font-medium text-white dark:bg-neutral-100 dark:text-neutral-900"
       >
-        Start practising
+        Start practicing
       </Link>
 
       <Link href="/history" className="text-sm underline underline-offset-4">

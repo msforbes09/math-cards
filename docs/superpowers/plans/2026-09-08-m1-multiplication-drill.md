@@ -851,6 +851,6 @@ git commit -m "Close the loop: results name the missed facts, history shows the 
 
 **Spec coverage:** session shape → Task 3 (`SESSION_LENGTH`) + Task 2; card layout and input → Task 6; retry and reveal → Tasks 3, 6; timing → Tasks 3, 4; scoring → Task 4; results screen → Task 7; history, cap and best-marking → Tasks 5, 7; storage failure and corrupt data → Task 5; routes → Tasks 6, 7; testing strategy → every task; deployment → Task 1 (CI); deferred items → not implemented, by design.
 
-**Placeholders:** none. Tasks 6 and 7 describe component composition in prose rather than full JSX, because the components are thin renderers over interfaces fully specified in Tasks 2–5, and their behaviour is pinned by the tests given verbatim.
+**Placeholders:** none. Tasks 6 and 7 describe component composition in prose rather than full JSX, because the components are thin renderers over interfaces fully specified in Tasks 2–5, and their behavior is pinned by the tests given verbatim.
 
 **Type consistency:** `Problem`, `CardState`, `SessionState`, `SessionSummary`, `MissedFact`, `SessionRecord` and `ProgressRepository` are each defined once and referenced by the same names throughout. `isAvailable()` is on the interface in Task 5 and used in Task 7.
