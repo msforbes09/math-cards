@@ -1,15 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { generateSession } from "@/src/domain/problem";
-import { SESSION_LENGTH } from "@/src/domain/session";
-import { DrillScreen } from "./drill-screen";
+import dynamic from "next/dynamic";
 
-/** Problems are drawn in the browser, not on the server: a server-side draw
- *  would differ from the client's and break hydration. */
+/**
+ * The draw has to happen in the browser and nowhere else. "use client" does not
+ * mean client-only - the component is still server-rendered first - so a random
+ * draw inside it produces one set of problems on the server and a different set
+ * on the client, which is a hydration mismatch. Loading the drill with
+ * ssr: false is what actually keeps the draw off the server.
+ */
+const DrillRun = dynamic(
+  () => import("./drill-run").then((module) => module.DrillRun),
+  {
+    ssr: false,
+    loading: () => (
+      <p className="text-sm text-neutral-500" role="status">
+        Shuffling the cards…
+      </p>
+    ),
+  },
+);
+
 export function Practice() {
-  const [problems] = useState(() =>
-    generateSession(SESSION_LENGTH, Math.random),
-  );
-  return <DrillScreen problems={problems} />;
+  return <DrillRun />;
 }
