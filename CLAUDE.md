@@ -108,7 +108,15 @@ into `develop` or `main`.
 real `Storage`. Node 22 (what CI runs) has no such global, so this splits local
 and CI behavior. `test/support/local-storage-polyfill.ts` installs a
 spec-compliant Storage *only when the environment's own one is unusable*.
-Spy on `window.localStorage` in tests, never on `Storage.prototype`.
+**Never spy on a localStorage method in tests.** jsdom implements Storage as a
+Proxy, so `vi.spyOn(window.localStorage, "setItem")` is swallowed as a stored
+key and the real method still runs — on Node 22 that made one test fail and
+another pass for the wrong reason, while on Node 25's polyfill both worked.
+Use `withFailingStorage()` from `test/support/failing-storage.ts`, which swaps
+the whole object and behaves the same on both.
+
+Both runtimes are worth running before pushing storage changes:
+`. ~/.nvm/nvm.sh && nvm use 22 && npx vitest run`.
 
 `npx tsc --noEmit` needs `.next/types` to exist, or it fails on Next's generated
 globals (`LayoutProps`, `PageProps`). Run `npm run build` once after a clean

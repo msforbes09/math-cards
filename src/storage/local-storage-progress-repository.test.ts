@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
+import { withFailingStorage } from "@/test/support/failing-storage";
 import {
   LocalStorageProgressRepository,
   STORAGE_KEY,
@@ -56,14 +57,15 @@ describe("LocalStorageProgressRepository", () => {
   });
 
   it("survives a storage that throws on write", () => {
-    const repo = new LocalStorageProgressRepository();
-    const setItem = vi
-      .spyOn(window.localStorage, "setItem")
-      .mockImplementation(() => {
-        throw new Error("QuotaExceededError");
-      });
-    expect(() => repo.save(record("a"))).not.toThrow();
-    setItem.mockRestore();
+    withFailingStorage(() => {
+      expect(() =>
+        new LocalStorageProgressRepository().save(record("a")),
+      ).not.toThrow();
+    });
+
+    // Nothing was persisted, which is what proves the write really did fail
+    // rather than the test passing because it never threw in the first place.
+    expect(new LocalStorageProgressRepository().list()).toEqual([]);
   });
 
   it("reports whether storage is available", () => {
@@ -71,12 +73,9 @@ describe("LocalStorageProgressRepository", () => {
   });
 
   it("reports storage as unavailable when writes throw", () => {
-    const setItem = vi
-      .spyOn(window.localStorage, "setItem")
-      .mockImplementation(() => {
-        throw new Error("SecurityError");
-      });
-    expect(new LocalStorageProgressRepository().isAvailable()).toBe(false);
-    setItem.mockRestore();
+    withFailingStorage(() => {
+      expect(new LocalStorageProgressRepository().isAvailable()).toBe(false);
+    });
+    expect(new LocalStorageProgressRepository().isAvailable()).toBe(true);
   });
 });
