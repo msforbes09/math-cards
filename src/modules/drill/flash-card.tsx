@@ -56,6 +56,13 @@ export function FlashCard({ card, revealing, wrong, onSubmit }: FlashCardProps) 
         className="w-48 rounded-lg border-2 border-neutral-400 bg-transparent p-3 text-center font-mono text-5xl tabular-nums outline-none focus:border-neutral-900 dark:focus:border-neutral-100"
       />
 
+      <button
+        type="submit"
+        className="rounded-md bg-neutral-900 px-8 py-3 text-lg font-medium text-white dark:bg-neutral-100 dark:text-neutral-900"
+      >
+        Check
+      </button>
+
       <div aria-live="polite" className="min-h-14 text-center">
         {revealing ? (
           <p data-testid="reveal" className="text-lg">

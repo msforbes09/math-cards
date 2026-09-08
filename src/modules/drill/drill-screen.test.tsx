@@ -79,6 +79,23 @@ describe("DrillScreen", () => {
     expect(screen.getByLabelText(/answer/i)).toHaveValue("");
   });
 
+  it("submits with the check button, for touch users with no Enter key", async () => {
+    const user = userEvent.setup();
+    render(<DrillScreen problems={twoCards} />);
+    await user.type(screen.getByLabelText(/answer/i), "56");
+    await user.click(screen.getByRole("button", { name: /check/i }));
+    expect(screen.getByTestId("progress")).toHaveTextContent("2 / 2");
+  });
+
+  it("gives the form a real submit button so Enter submits it", () => {
+    render(<DrillScreen problems={twoCards} />);
+    const button = screen.getByRole("button", { name: /check/i });
+    expect(button).toHaveAttribute("type", "submit");
+    expect(button.closest("form")).toBe(
+      screen.getByLabelText(/answer/i).closest("form"),
+    );
+  });
+
   it("shows the results when every card is done", async () => {
     const user = userEvent.setup();
     render(<DrillScreen problems={[{ left: 7, right: 8 }]} />);
