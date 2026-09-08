@@ -93,6 +93,13 @@ npm run lint        # eslint
 GitHub Actions (`.github/workflows/ci.yml`) runs the same three on every PR
 into `develop` or `main`.
 
+**Node 25's built-in `localStorage`** is an inert stub without
+`--localstorage-file`, and Vitest's jsdom environment lets it shadow jsdom's
+real `Storage`. Node 22 (what CI runs) has no such global, so this splits local
+and CI behaviour. `test/support/local-storage-polyfill.ts` installs a
+spec-compliant Storage *only when the environment's own one is unusable*.
+Spy on `window.localStorage` in tests, never on `Storage.prototype`.
+
 `npx tsc --noEmit` needs `.next/types` to exist, or it fails on Next's generated
 globals (`LayoutProps`, `PageProps`). Run `npm run build` once after a clean
 checkout. CI builds before it typechecks for the same reason.
